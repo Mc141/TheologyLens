@@ -13,37 +13,40 @@ MONGO_URI = os.getenv("MONGO_URI")
 
 # Connect to MongoDB
 try:
-    client = pymongo.MongoClient(MONGO_URI)
+    client = MongoClient(MONGO_URI)
 except pymongo.errors.ConfigurationError:
-    print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
+    print("Invalid MongoDB URI. Check your .env settings.")
     sys.exit(1)
 
-# Access the theologylens database and verses collection
+# Access the database and collection
 db = client.theologylens
 my_collection = db["verses"]
 
-# Function to find a specific verse
-def find_verse():
-    my_doc = my_collection.find_one({"text": "In the beginning God created the heavens and the earth."})
+# Function to find all verses matching the given text
+def find_verses(text):
+    cursor = my_collection.find({"text": {"$regex": text, "$options": "i"}})  # case-insensitive match
+    results = []
 
-    if my_doc:
-        print("Found verse")
-        verse = {
-            "reference": f"{my_doc['book']} {my_doc['chapter']}:{my_doc['verse']}",
-            "text": my_doc["text"]
-        }
-        print(verse)
-        return verse
+    for doc in cursor:
+        results.append({
+            "reference": f"{doc.get('book')} {doc.get('chapter')}:{doc.get('verse')}",
+            "text": doc.get("text")
+        })
+
+    if results:
+        return results
     else:
-        print("No verse was found\n")
-        return {"error": "Verse not found"}, 404
+        return {"error": "No verses found"}, 404
 
 # Flask app setup
 app = Flask(__name__)
 
 @app.route('/verse', methods=['GET'])
-def get_verse():
-    return jsonify(find_verse())
+def get_verses():
+    text = request.args.get('text')
+    if not text:
+        return {"error": "Missing 'text' query parameter"}, 400
+    return jsonify(find_verses(text))
 
 if __name__ == '__main__':
     app.run(port=5000)
