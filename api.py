@@ -1,5 +1,6 @@
 import os
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from pymongo import MongoClient
 from dotenv import load_dotenv
 import pymongo
@@ -40,6 +41,7 @@ def find_verses(text):
 
 # Flask app setup
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/verse', methods=['GET'])
 def get_verses():
