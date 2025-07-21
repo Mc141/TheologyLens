@@ -1,0 +1,126 @@
+@import "tailwindcss";
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+.main-card {
+    border: solid 1px lightcoral;
+    border-radius: 20px;
+    padding: 20px 20px 0px 20px;
+    max-width: 460px;
+}
+
+h1 {
+    font-size: x-large;
+    padding-bottom: 15px;
+}
+
+.search-container {
+    max-width: 400px;
+}
+
+#Search {
+    padding: 10px 40px 10px 10px;
+    border: solid 1px lightcoral;
+}
+
+.rounded-full {
+    cursor: pointer;
+}
+
+.search-subtext-container {
+    display: grid;
+    margin-top: 20px;
+}
+
+.search-subtext {
+    color: rgb(242, 161, 161);
+
+    font-size: medium;
+}
+
+p.search-subtext:nth-child(1) {
+    width: 0px;
+}
+
+p.search-subtext:nth-child(3) {
+    grid-column: 2 / 3;
+}
+
+.theme-title {
+    font-size: large;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#themes-container {
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+}
+
+.theme-tag {
+    border: solid 1px rgb(234, 173, 173);
+    border-radius: 5px;
+    padding: 0 15px 3px 15px;
+}
+
+.results-title {
+    font-size: large;
+    padding-top: 20px;
+    margin-bottom: 10px;
+}
+
+ul {
+    padding: 0 10px;
+    max-height: 300px;
+}
+
+li {
+    border: solid 1px rgb(234, 173, 173);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.verse-title {
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+li p {
+    line-height: normal;
+}
+
+hr {
+    color: rgb(234, 173, 173);
+    padding-bottom: 20px;
+    width: 100%;
+}
+
+footer {
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-a {
+    display: block;
+    text-decoration: underline;
+}
+
+.footer-a:hover {
+    color: rgb(96, 76, 76);
+}
+
+footer p{
+    font-size: small;
+    color: rgb(96, 76, 76);
+    padding-top: 10px;
+}
