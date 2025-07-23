@@ -2,6 +2,26 @@ import pandas as pd
 import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
+from fastapi import FastAPI, Form
+from pydantic import BaseModel
+
+
+class Question(BaseModel):
+    question: str
+
+
+app = FastAPI()
+
+
+
+@app.post("/post_question")
+async def post_question(question: Question):
+    result = await search_closest_verses(question.question)
+    return result.to_dict('records')
+
+
+
+
 
 # Load the CSV
 df = pd.read_csv("./data/web_embedding.csv")
@@ -36,7 +56,7 @@ print(f"Number of vectors in the index: {index.ntotal}")
 model = SentenceTransformer('sentence-transformers/multi-qa-mpnet-base-cos-v1')
 
 # Function to search for the closest verses
-def search_closest_verses(user_input, k=10): # k = number of verses to return
+async def search_closest_verses(user_input, k=10): # k = number of verses to return
     # Encode the user's query
     user_input_encoded = model.encode(user_input, convert_to_tensor=True)
     user_input_encoded = np.array(user_input_encoded, dtype="float32").reshape(1, -1)
@@ -47,13 +67,23 @@ def search_closest_verses(user_input, k=10): # k = number of verses to return
     # Retrieve the associated verses using the indices
     closest_verses = df.iloc[I[0]]  # The first element since we passed a single query
     
-    return closest_verses[['verse', 'embedding']]
+    return closest_verses[['Reference', 'Verse']] # old: [['verse', 'embedding']]
 
-# Example user input
-user_input = "What does the Bible say about x?" #input
 
-# Get the closest 10 verses
-closest_verses = search_closest_verses(user_input)
 
-# Display the results
-print(closest_verses)
+
+# # Example user input
+# user_input = "What does the Bible say about x?" #input
+
+# # Get the closest 10 verses
+# closest_verses = search_closest_verses(user_input)
+
+# # Display the results
+# print(closest_verses)
+
+
+
+
+
+
+
