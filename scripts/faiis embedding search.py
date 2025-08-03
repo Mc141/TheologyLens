@@ -2,25 +2,6 @@ import pandas as pd
 import numpy as np
 import faiss
 from sentence_transformers import SentenceTransformer
-from fastapi import FastAPI, Form
-from pydantic import BaseModel
-
-
-class Question(BaseModel):
-    question: str
-
-
-app = FastAPI()
-
-
-
-@app.post("/post_question")
-async def post_question(question: Question):
-    result = await search_closest_verses(question.question)
-    return result.to_dict('records')
-
-
-
 
 
 # Load the CSV
